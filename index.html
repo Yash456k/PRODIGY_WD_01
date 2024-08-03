@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Modern Landing Page</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: "Arial", sans-serif;
+      }
+
+      body {
+        overflow: hidden;
+        background-color: #2c3e50;
+        color: #ecf0f1;
+        transition: background-color 0.5s ease;
+        overflow-x: hidden;
+      }
+
+      .navbar {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 20px;
+        background-color: rgba(0, 0, 0, 0.8);
+        backdrop-filter: blur(10px);
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        z-index: 1000;
+      }
+
+      .navbar a {
+        color: #ecf0f1;
+        text-decoration: none;
+        padding: 10px 20px;
+        margin: 0 10px;
+        font-size: 18px;
+        position: relative;
+        overflow: hidden;
+        transition: color 0.3s ease;
+      }
+
+      .navbar a::before {
+        content: "";
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        height: 2px;
+        background-color: #ecf0f1;
+        transform: translateX(-100%);
+        transition: transform 0.3s ease;
+      }
+
+      .navbar a:hover::before {
+        transform: translateX(0);
+      }
+
+      .content {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        padding: 20px;
+        text-align: center;
+      }
+
+      h1 {
+        font-size: 48px;
+        margin-bottom: 20px;
+        opacity: 0;
+        transform: translateY(20px);
+        animation: fadeInUp 1s forwards;
+      }
+
+      p {
+        font-size: 24px;
+        max-width: 600px;
+        line-height: 1.6;
+        opacity: 0;
+        transform: translateY(20px);
+        animation: fadeInUp 1s 0.5s forwards;
+      }
+
+      .floating-text {
+        position: absolute;
+        font-size: 18px;
+        color: #ecf0f1;
+        opacity: 0;
+        pointer-events: none;
+        transition: transform 0.5s ease, opacity 0.5s ease;
+      }
+
+      @keyframes fadeInUp {
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <nav class="navbar">
+      <a href="#" data-color="#2c3e50">Home</a>
+      <a href="#" data-color="#702963">About</a>
+      <a href="#" data-color="#2980b9">Services</a>
+      <a href="#" data-color="#16a085">Contact</a>
+    </nav>
+
+    <div class="content">
+      <h1>Welcome to Our Modern Website</h1>
+      <p>
+        Experience the future of web design with our innovative, responsive, and
+        interactive landing page. Hover over the navigation items to see the
+        magic happen!
+      </p>
+    </div>
+
+    <script>
+      const navItems = document.querySelectorAll(".navbar a");
+      const body = document.body;
+      let defaultColor = getComputedStyle(body).backgroundColor;
+
+      const randomTexts = [
+        "Amazing!",
+        "Wow!",
+        "Cool!",
+        "Fantastic!",
+        "Awesome!",
+        "Incredible!",
+        "Superb!",
+        "Excellent!",
+        "Brilliant!",
+        "Marvelous!",
+      ];
+
+      let floatingTexts = [];
+
+      function createFloatingText(x) {
+        const text = document.createElement("div");
+        text.classList.add("floating-text");
+        text.style.left = `${x}px`;
+        text.style.bottom = "-50px";
+        text.textContent =
+          randomTexts[Math.floor(Math.random() * randomTexts.length)];
+        document.body.appendChild(text);
+
+        setTimeout(() => {
+          text.style.opacity = "1";
+          text.style.transform = `translateY(-${
+            100 + Math.random() * 100
+          }px) rotate(${-15 + Math.random() * 30}deg)`;
+        }, 50);
+
+        return text;
+      }
+
+      function removeFloatingTexts() {
+        floatingTexts.forEach((text) => {
+          text.style.opacity = "0";
+          text.style.transform = "translateY(50px)";
+          setTimeout(() => {
+            document.body.removeChild(text);
+          }, 500);
+        });
+        floatingTexts = [];
+      }
+
+      navItems.forEach((item) => {
+        item.addEventListener("mouseenter", (e) => {
+          body.style.backgroundColor = item.getAttribute("data-color");
+          if (floatingTexts.length === 0) {
+            const text = createFloatingText(
+              e.clientX - 50 + Math.random() * 100
+            );
+            floatingTexts.push(text);
+          }
+        });
+
+        item.addEventListener("mouseleave", () => {
+          body.style.backgroundColor = defaultColor;
+          removeFloatingTexts();
+        });
+      });
+    </script>
+  </body>
+</html>
